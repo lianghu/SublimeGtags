@@ -16,8 +16,9 @@ else:
     import SublimeGtags.gtags
     from SublimeGtags.gtags import TagFile, PP, find_tags_root
 
-settings = sublime.load_settings('GTags.sublime-settings')
 
+def get_settings():
+    return sublime.load_settings('GTags.sublime-settings')
 
 def run_on_cwd(dir=None):
     window = sublime.active_window()
@@ -38,7 +39,7 @@ def run_on_cwd(dir=None):
         else:
             tags_root = dir[0]
 
-        tags = TagFile(tags_root, settings.get('extra_tag_paths'))
+        tags = TagFile(tags_root, get_settings().get('extra_tag_paths'))
         func(view, tags, tags_root)
 
     return wrapper
@@ -122,7 +123,7 @@ def gtags_jump_keyword(view, keywords, root, showpanel=False):
             jump(keywords[index])
 
     if showpanel or len(keywords) > 1:
-        if settings.get('show_relative_paths'):
+        if get_settings().get('show_relative_paths'):
             convert_path = lambda path: os.path.relpath(path, root)
         else:
             convert_path = os.path.normpath
