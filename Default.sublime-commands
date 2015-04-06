@@ -1,0 +1,19 @@
+[
+    {
+        "caption": "Gtags: Show symbol",
+        "command": "gtags_show_symbols",
+    },
+    {
+        "caption": "Gtags: Rebuild tags",
+        "command": "gtags_rebuild_tags",
+    },
+    {
+        "caption": "Gtags: Navigate to definition",
+        "command": "gtags_navigate_to_definition",
+    },
+    {
+        "caption": "Gtags: Find references",
+        "command": "gtags_find_references",
+    },
+
+]
