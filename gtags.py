@@ -13,9 +13,9 @@ import sublime
 PP = pprint.PrettyPrinter(indent=4)
 
 TAGS_RE = re.compile(
+    '(?P<path>[^\s]+)\s+'
     '(?P<symbol>[^\s]+)\s+'
     '(?P<linenum>[^\s]+)\s+'
-    '(?P<path>[^\s]+)\s+'
     '(?P<signature>.*)'
 )
 
@@ -76,7 +76,6 @@ class TagFile(object):
     def __init__(self, root_dir=None, extra_paths=[]):
         self.__env = {'PATH': ENV_PATH}
         self.__root = root_dir
-
         if root_dir is not None:
             self.__env['GTAGSROOT'] = self._expand_path(root_dir)
 
@@ -99,15 +98,16 @@ class TagFile(object):
         else:
             lines = self.subprocess.stdout(
             'global %s %s' % (options, pattern)).splitlines()
-        
 
         matches = []
         for search_obj in (t for t in (TAGS_RE.search(l) for l in lines) if t):
-            matches.append(search_obj.groupdict())
+            obj = search_obj.groupdict()
+            obj['path'] = obj['path'].replace("%20", ' ')
+            matches.append(obj)
         return matches
 
     def match(self, pattern, reference=False):
-        return self._match(pattern, '-ax' + ('r' if reference else ''))
+        return self._match(pattern, '--result cscope --encode-path " " -ax' + ('r' if reference else ''))
 
     def rebuild(self):
         retcode, stderr = self.subprocess.call('gtags -v', cwd=self.__root)
