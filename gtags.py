@@ -69,7 +69,7 @@ class TagSubprocess(object):
 class TagFile(object):
     def _expand_path(self, path):
         path = os.path.expandvars(os.path.expanduser(path))
-        if IS_WINDOWS:
+        if int(sublime.version()) < 3000 and IS_WINDOWS:
             path = path.encode('utf-8')
         return path
 
