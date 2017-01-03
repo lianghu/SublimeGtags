@@ -217,3 +217,25 @@ class GtagsRebuildTags(sublime_plugin.TextCommand):
                 'Rebuilding tags on %s' % root,
                 'Tags rebuilt successfully on %s' % root,
                 'Error while tags rebuilding, see console for details')
+
+class TagsUpdateThread(threading.Thread):
+    def __init__(self, tags):
+        threading.Thread.__init__(self)
+        self.tags = tags
+
+    def run(self):
+        self.success = self.tags.update()
+
+class GtagsUpdateTags(sublime_plugin.TextCommand):
+    def run(self, edit, **kwargs):
+        # set root folder if run from sidebar context menu
+        root = kwargs.get('dirs')
+
+        @run_on_cwd(dir=root)
+        def and_then(view, tags, root):
+            thread = TagsUpdateThread(tags)
+            thread.start()
+            ThreadProgress(thread,
+                'Updating tags incrementally on %s' % root,
+                'Tags updated successfully on %s' % root,
+                'Error while tags updating, see console for details')

@@ -15,5 +15,12 @@
         "caption": "Gtags: Find references",
         "command": "gtags_find_references",
     },
-
+    {
+        "caption": "Gtags: Update tags",
+        "command": "gtags_update_tags",
+    },
+    {
+        "caption": "Gtags: Jump back",
+        "command": "gtags_jump_back",
+    }
 ]

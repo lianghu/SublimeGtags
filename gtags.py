@@ -116,6 +116,12 @@ class TagFile(object):
             print(stderr)
         return success
 
+    def update(self):
+        retcode, stderr = self.subprocess.call('global -u', cwd=self.__root)
+        success = retcode == 0
+        if not success:
+            print(stderr)
+        return success
 
 class GTagsTest(unittest.TestCase):
     def test_start_with(self):
